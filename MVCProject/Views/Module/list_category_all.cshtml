@@ -1,0 +1,13 @@
+﻿@model IEnumerable<MVCProject.Models.Category>
+@{
+    Layout = null;
+}
+
+<ul class="list-group bg-white">
+    <li class="list-group-item "><h5 class="font-weight-bold text-xanh "><i class="far fa-folder-open"></i> LOẠI SẢN PHẨM</h5></li>
+    @foreach (var item in Model)
+    {
+        <li class="list-group-item"><a class="card-link text-body1" href="~/@item.Slug">@item.Name</a></li>
+    }
+
+</ul>

@@ -1,0 +1,8 @@
+﻿@model IEnumerable<MVCProject.Models.Category>
+
+@{ 
+    var mainmenuitem = ViewBag.mainmenuitem;
+    Layout = null;
+}
+
+<li class="nav-item "><a class="nav-link border-bottom" href="~/@mainmenuitem.Slug"> @mainmenuitem.Name</a></li>

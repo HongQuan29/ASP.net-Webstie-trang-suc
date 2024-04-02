@@ -1,0 +1,52 @@
+﻿@model IEnumerable<MVCProject.Models.Product>
+@{
+    Layout = null;
+}
+
+@foreach (var item in Model)
+{
+    int sale = (int)item.Pricesale;
+    float price = (int)item.Price - (int)item.Price / 100 * (int)sale;
+    if (sale > 0)
+    {
+        <div class="col-md-3 py-2 ">
+            <div class="card">
+                <div class="card-body">
+                    <div class="position-relative">
+                        <div class="arrow-up">
+                            <span class=" text-white pl-3">-@sale%</span>
+                        </div>
+                        <a href="~/@item.Slug"><img class="card-img-top" src="~/public/images/@item.Img" alt="Card image"></a>
+                    </div>
+                    <div class="card-title text-dark pt-1"><h6><a href="~/@item.Slug" class="text-danger">@item.Name</a></h6></div>
+                    <div class="card-title text-dark">
+                        <h6 class="font-weight-bold"><strike> @item.Price.ToString("N0") VND </strike></h6>
+                        <h6 class="font-weight-bold text-danger"> @price.ToString("N0") VND</h6>
+                        <a href="@item.Slug" class="btn btn-sm text-white btn-warning"><i class="fas fa-eye"></i>Chi tiết</a>
+                        <button id="addcartH" onclick="addcart(@item.ID)" class="btn btn-sm text-white   btn-dodam"><i class="fas fa-cart-plus"></i> Thêm GH</button>
+                        <input type="hidden" value="1" id="sel1" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="col-md-3 py-2 ">
+            <div class="card">
+                <div class="card-body">
+                    <div class="position-relative">
+                        <a href="~/@item.Slug"><img class="card-img-top" src="~/public/images/@item.Img" alt="Card image"></a>
+                    </div>
+                    <div class="card-title text-dark pt-1"><h6><a href="~/@item.Slug" class="text-danger">@item.Name</a></h6></div>
+                    <div class="card-title text-dark">
+                        <h6 class="font-weight-bold text-orange"> @item.Price.ToString("N0") VND </h6>
+                        <a href="@item.Slug" class="btn btn-sm text-white btn-warning"><i class="fas fa-eye"></i>Chi tiết</a>
+                        <button id="addcartH" onclick="addcart(@item.ID)" class="btn btn-sm text-white   btn-dodam"><i class="fas fa-cart-plus"></i> Thêm GH</button>
+                        <input type="hidden" value="1" id="sel1" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}

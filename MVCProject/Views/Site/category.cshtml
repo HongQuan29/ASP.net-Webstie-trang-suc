@@ -1,0 +1,28 @@
+﻿@model MVCProject.Models.Category
+
+@{
+    ViewBag.Title = "category";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Action("Mainmenu", "Module")
+<section class="container-fluid pt-3">
+    <div class="container ">
+        <div class="row">
+            <div class="col-md-3">
+                @Html.Action("ListCategory", "Module")
+            </div>
+            <div class="col-md-9">
+                <div class="card ">
+                    <h3 class="card-header text-xanhduong bg-white">@Model.Name</h3>
+                    <div class="card-body">
+                        <div class="row">
+                            @Html.Action("SubCategory", "Product", new { catid = @Model.ID, slug = Model.Slug })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

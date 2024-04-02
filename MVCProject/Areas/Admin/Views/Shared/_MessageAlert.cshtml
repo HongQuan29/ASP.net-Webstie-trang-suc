@@ -1,0 +1,7 @@
+﻿@if (MVCProject.Library.Message.has_flash())
+{
+    MVCProject.Models.MessageModel ms = MVCProject.Library.Message.get_flash();
+    <div class="float-left ">
+        <span class=" ml-3  text-@ms.Msg_css">@ms.Msg</span>
+    </div>
+}
