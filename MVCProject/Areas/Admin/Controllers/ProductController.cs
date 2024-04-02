@@ -79,6 +79,59 @@ namespace MVCProject.Areas.Admin.Controllers
             Message.set_flash("Thêm Thất Bại", "danger");
             return View(p);
         }
-        
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Product p = _context.Products.Find(id);
+            if (p == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.ListCategory = _context.Categories.Where(m => m.Status != 0 && m.ID >= 1).ToList();
+            return View(p);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateInput(false)]
+        public ActionResult Edit(Product p, HttpPostedFileBase f) 
+        {
+            if(ModelState.IsValid)
+            {
+                string slug = MyString.ToSlug(p.Name.ToString());
+                f = Request.Files["img"];
+                string filename = f.FileName.ToString();
+                if (filename.Equals("") == false)
+                {
+                    var namecateDb = _context.Categories.Where(m => m.ID == p.CatId).First();
+                    string namecate = MyString.ToStringWithoutSpace(namecateDb.Name);
+                    string ExtensionFile = MyString.GetFileExtension(filename);
+                    string namefilenew = namecate + "/" + slug + "." + ExtensionFile;
+                    var path = Path.Combine(Server.MapPath("~/public/images"), namefilenew);
+                    var folder = Server.MapPath("~/public/images/" + namecate);
+                    if (!Directory.Exists(folder))
+                    {
+                        Directory.CreateDirectory(folder);
+                    }
+                    f.SaveAs(path);
+                    p.Img = namefilenew;
+                }
+                p.Slug = slug;
+                p.Updated_at = DateTime.Now;
+                //p.Updated_by = int.Parse(Session["Admin_id"].ToString());
+                _context.Entry(p).State = EntityState.Modified;
+                _context.SaveChanges();
+                ViewBag.ListCategory = _context.Categories.Where(m => m.Status != 0 && m.ID >= 1).ToList();
+                Message.set_flash("Sửa thành công", "success");
+                return RedirectToAction("Index");
+            }
+            Message.set_flash("Sửa thất bại", "danger");
+            ViewBag.ListCategory = _context.Categories.Where(m => m.Status != 0 && m.ID >= 1).ToList();
+            return View(p);
+        }
+
+       
     }
 }
