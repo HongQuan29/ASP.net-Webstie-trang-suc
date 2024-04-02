@@ -24,7 +24,7 @@
     SelectListItem roleItem;
     foreach (var item in ViewBag.role)
     {
-        roleItem = new SelectListItem() { Value = item.parentId + "", Text = item.accessName + "" };
+        roleItem = new SelectListItem() { Value = item.ParentId + "", Text = item.AccessName + "" };
         listRole.Add(roleItem);
     }
 }
