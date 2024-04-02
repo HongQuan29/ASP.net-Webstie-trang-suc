@@ -132,6 +132,16 @@ namespace MVCProject.Areas.Admin.Controllers
             return View(p);
         }
 
-       
+        public ActionResult Delete(int id)
+        {
+            Product p = _context.Products.Find(id);
+            p.Status = 0;
+            p.Updated_at = DateTime.Now;
+            p.Updated_by = int.Parse(Session["Admin_id"].ToString());
+            _context.Entry(p).State = EntityState.Modified;
+            _context.SaveChanges();
+            Message.set_flash("Xóa thành công", "success");
+            return RedirectToAction("Index");
+        }
     }
 }
