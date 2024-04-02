@@ -19,5 +19,12 @@ namespace MVCProject.Areas.Admin.Controllers
             var list = db.Users.Where(m => m.Status != 0).OrderByDescending(m => m.ID).ToList();
             return View(list);
         }
+
+        // admin/user/create
+        public ActionResult Create()
+        {
+            ViewBag.Role = db.Roles.ToList();
+            return View();  
+        }
     }
 }
