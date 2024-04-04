@@ -21,7 +21,7 @@ namespace MVCProject.Areas.Admin.Controllers
         public ActionResult Index()
         {
             ViewBag.listCate = db.Categories.Where(m => m.Status != 0).ToList();
-            var list = db.Categories.Where(m => m.Status > 0).ToList() ;
+            var list = db.Categories.Where(m => m.Status > 0).ToList();
             return View(list);
         }
 
@@ -47,11 +47,11 @@ namespace MVCProject.Areas.Admin.Controllers
                     return View(category);
                 }
                 //topic
-               /* if (db.top.Where(m => m.slug == slug).Count() > 0)
-                {
-                    Message.set_flash("Loại sản phẩm đã tồn tại trong bảng Topic", "danger");
-                    return View(category);
-                }*/
+                /* if (db.top.Where(m => m.slug == slug).Count() > 0)
+                 {
+                     Message.set_flash("Loại sản phẩm đã tồn tại trong bảng Topic", "danger");
+                     return View(category);
+                 }*/
                 if (db.Products.Where(m => m.Slug == slug).Count() > 0)
                 {
                     Message.set_flash("Loại sản phẩm đã tồn tại trong bảng Product", "danger");
@@ -145,4 +145,5 @@ namespace MVCProject.Areas.Admin.Controllers
             Message.set_flash("Thay đổi trang thái thành công", "success");
             return RedirectToAction("Index");
         }
+    }
 }
