@@ -47,7 +47,6 @@ namespace MVCProject.Areas.Admin.Controllers
                     return View(category);
                 }
                 //topic
-
                /* if (db.top.Where(m => m.slug == slug).Count() > 0)
                 {
                     Message.set_flash("Loại sản phẩm đã tồn tại trong bảng Topic", "danger");
@@ -134,5 +133,16 @@ namespace MVCProject.Areas.Admin.Controllers
             Message.set_flash("Sửa thất bại", "success");
             return View(category);
         }
-    }
+        //status
+        public ActionResult Status(int id)
+        {
+            Category category = db.Categories.Find(id);
+            category.Status = (category.Status == 1) ? 2 : 1;
+            category.Updated_at = DateTime.Now;
+            category.Updated_by = int.Parse(Session["Admin_id"].ToString());
+            db.Entry(category).State = EntityState.Modified;
+            db.SaveChanges();
+            Message.set_flash("Thay đổi trang thái thành công", "success");
+            return RedirectToAction("Index");
+        }
 }
