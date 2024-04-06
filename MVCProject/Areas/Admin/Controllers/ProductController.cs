@@ -173,5 +173,17 @@ namespace MVCProject.Areas.Admin.Controllers
             Message.set_flash("Xóa thành công", "success");
             return RedirectToAction("Index");
         }
+
+        public ActionResult Retrash(int id)
+        {
+            Product product = db.Products.Find(id);
+            product.Status = 2;
+            product.Updated_at = DateTime.Now;
+            product.Updated_by = int.Parse(Session["Admin_id"].ToString());
+            db.Entry(product).State = EntityState.Modified;
+            db.SaveChanges();
+            Message.set_flash("khôi phục thành công", "success");
+            return RedirectToAction("trash");
+        }
     }
 }
