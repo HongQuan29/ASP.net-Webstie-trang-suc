@@ -11,7 +11,7 @@ using System.Web.Mvc;
 
 namespace MVCProject.Areas.Admin.Controllers
 {
-    public class ProductController : Controller
+    public class ProductController : BaseController
     {
         // GET: Admin/Product
         MojiDbContext db = new MojiDbContext();
