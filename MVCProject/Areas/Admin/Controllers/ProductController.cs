@@ -185,5 +185,14 @@ namespace MVCProject.Areas.Admin.Controllers
             Message.set_flash("khôi phục thành công", "success");
             return RedirectToAction("trash");
         }
+
+        public ActionResult deleteTrash(int id)
+        {
+            Product product = db.Products.Find(id);
+            db.Products.Remove(product);
+            db.SaveChanges();
+            Message.set_flash("Đã xóa vĩnh viễn 1 sản phẩm", "success");
+            return RedirectToAction("trash");
+        }
     }
 }
