@@ -49,5 +49,11 @@ namespace MVCProject.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult trash()
+        {
+            var list = db.Contacts.Where(m => m.Status == 0).ToList();
+            return View("Trash", list);
+        }
+
     }
 }
