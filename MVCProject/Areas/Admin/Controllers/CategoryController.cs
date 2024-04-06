@@ -146,23 +146,6 @@ namespace MVCProject.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
-        //trash
-        public ActionResult trash()
-        {
-            var list = db.Categories.Where(m => m.Status == 0).ToList();
-            return View("Trash", list);                 // danh mục
-        }
-
-        public ActionResult Deltrash(int id)
-        {
-            Category category = db.Categories.Find(id);
-            category.Status = 0;
-            category.Updated_at = DateTime.Now;
-            category.Updated_by = int.Parse(Session["Admin_id"].ToString());
-            db.Entry(category).State = EntityState.Modified;
-            db.SaveChanges();
-            Message.set_flash("Xóa thành công", "success");
-            return RedirectToAction("Index");           // hiển thị danh mục
-        }
+        
     }
 }

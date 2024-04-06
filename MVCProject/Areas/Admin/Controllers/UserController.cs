@@ -104,7 +104,7 @@ namespace MVCProject.Areas.Admin.Controllers
             user.Updated_by = int.Parse(Session["Admin_id"].ToString());
             db.Entry(user).State = EntityState.Modified;
             db.SaveChanges();
-            Message.set_flash("Thay đổi trang thái thành công", "success");
+            Message.set_flash("Thay đổi trạng thái thành công", "success");
             return RedirectToAction("Index");
         }
 
