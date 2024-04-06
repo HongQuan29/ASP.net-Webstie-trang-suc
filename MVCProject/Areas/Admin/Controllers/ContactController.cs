@@ -79,5 +79,14 @@ namespace MVCProject.Areas.Admin.Controllers
             return RedirectToAction("trash");
         }
 
+        public ActionResult deleteTrash(int id)
+        {
+            Contact contact = db.Contacts.Find(id);
+            db.Contacts.Remove(contact);
+            db.SaveChanges();
+            Message.set_flash("Đã xóa vĩnh viễn 1 Liên Hệ", "success");
+            return RedirectToAction("trash");
+        }
+
     }
 }
