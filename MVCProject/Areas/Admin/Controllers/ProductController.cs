@@ -155,5 +155,11 @@ namespace MVCProject.Areas.Admin.Controllers
             Message.set_flash("Thay đổi trang thái thành công", "success");
             return RedirectToAction("Index");
         }
+
+        public ActionResult trash()
+        {
+            var list = db.Products.Where(m => m.Status == 0).ToList();
+            return View("Trash", list);
+        }
     }
 }
