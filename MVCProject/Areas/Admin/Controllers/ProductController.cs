@@ -161,5 +161,17 @@ namespace MVCProject.Areas.Admin.Controllers
             var list = db.Products.Where(m => m.Status == 0).ToList();
             return View("Trash", list);
         }
+
+        public ActionResult Deltrash(int id)
+        {
+            Product product = db.Products.Find(id);
+            product.Status = 0;
+            product.Updated_at = DateTime.Now;
+            product.Updated_by = int.Parse(Session["Admin_id"].ToString());
+            db.Entry(product).State = EntityState.Modified;
+            db.SaveChanges();
+            Message.set_flash("Xóa thành công", "success");
+            return RedirectToAction("Index");
+        }
     }
 }
