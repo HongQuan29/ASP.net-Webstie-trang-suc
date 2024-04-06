@@ -67,5 +67,17 @@ namespace MVCProject.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult Retrash(int id)
+        {
+            Contact contact = db.Contacts.Find(id);
+            contact.Status = 2;
+            contact.Updated_at = DateTime.Now;
+            contact.Updated_by = int.Parse(Session["Admin_id"].ToString());
+            db.Entry(contact).State = EntityState.Modified;
+            db.SaveChanges();
+            Message.set_flash("khôi phục thành công", "success");
+            return RedirectToAction("trash");
+        }
+
     }
 }
