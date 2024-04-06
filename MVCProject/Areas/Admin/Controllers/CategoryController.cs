@@ -164,5 +164,17 @@ namespace MVCProject.Areas.Admin.Controllers
             Message.set_flash("Xóa thành công", "success");
             return RedirectToAction("Index");           // hiển thị danh mục
         }
+
+        public ActionResult Retrash(int id)
+        {
+            Category category = db.Categories.Find(id);
+            category.Status = 2;
+            category.Updated_at = DateTime.Now;
+            category.Updated_by = int.Parse(Session["Admin_id"].ToString());
+            db.Entry(category).State = EntityState.Modified;
+            db.SaveChanges();
+            Message.set_flash("khôi phục thành công", "success");
+            return RedirectToAction("trash");
+        }
     }
 }
