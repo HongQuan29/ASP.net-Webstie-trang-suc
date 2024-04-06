@@ -14,15 +14,15 @@ namespace MVCProject.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         // GET: Admin/Product
-        MojiDbContext _context = new MojiDbContext();
+        MojiDbContext db = new MojiDbContext();
         public ActionResult Index()
         {
-            var list = _context.Products.Where(m => m.Status != 0).OrderByDescending(m => m.ID).ToList();
+            var list = db.Products.Where(m => m.Status != 0).OrderByDescending(m => m.ID).ToList();
             return View(list);
         }
         public ActionResult Create()
         {
-            ViewBag.ListCategory = _context.Categories.Where(m => m.Status != 0 && m.ID >= 1).ToList();
+            ViewBag.ListCategory = db.Categories.Where(m => m.Status != 0 && m.ID >= 1).ToList();
             return View();
         }
         [HttpPost]
@@ -30,23 +30,23 @@ namespace MVCProject.Areas.Admin.Controllers
         [ValidateInput(false)]
         public ActionResult Create(Product p, HttpPostedFileBase f)
         {
-            ViewBag.ListCategory = _context.Categories.Where(m => m.Status != 0 && m.ID >= 1).ToList();
+            ViewBag.ListCategory = db.Categories.Where(m => m.Status != 0 && m.ID >= 1).ToList();
             if(ModelState.IsValid)
             {
                 // lấy tên sản phẩm làm slug
                 string slug = MyString.ToSlug(p.Name.ToString());
-                if (_context.Categories.Where(m=>m.Slug == slug).Count() > 0)
+                if (db.Categories.Where(m=>m.Slug == slug).Count() > 0)
                 {
                     Message.set_flash("Sản phẩm đã tồn tại", "danger");
                     return View(p);
                 }
-                if (_context.Products.Where(m => m.Slug == slug).Count() > 0)
+                if (db.Products.Where(m => m.Slug == slug).Count() > 0)
                 {
                     Message.set_flash(" Sản phẩm đã tồn tại", "danger");
                     return View(p);
                 }
                 // lấy tên loại sản phẩm
-                var namecateDb = _context.Categories.Where(m => m.ID == p.CatId).First();
+                var namecateDb = db.Categories.Where(m => m.ID == p.CatId).First();
                 string namecate = MyString.ToStringWithoutSpace(namecateDb.Name);
                 // lấy tên ảnh
                 f = Request.Files["img"];
@@ -71,8 +71,8 @@ namespace MVCProject.Areas.Admin.Controllers
                 p.Updated_at = DateTime.Now;
                 //p.Created_by = int.Parse(Session["Admin_id"].ToString());
                 //p.Updated_by = int.Parse(Session["Admin_id"].ToString());
-                _context.Products.Add(p);
-                _context.SaveChanges();
+                db.Products.Add(p);
+                db.SaveChanges();
                 Message.set_flash("Thêm thành công", "success");
                 return RedirectToAction("index");
             }
@@ -85,12 +85,12 @@ namespace MVCProject.Areas.Admin.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Product p = _context.Products.Find(id);
+            Product p = db.Products.Find(id);
             if (p == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.ListCategory = _context.Categories.Where(m => m.Status != 0 && m.ID >= 1).ToList();
+            ViewBag.ListCategory = db.Categories.Where(m => m.Status != 0 && m.ID >= 1).ToList();
             return View(p);
         }
         [HttpPost]
@@ -105,7 +105,7 @@ namespace MVCProject.Areas.Admin.Controllers
                 string filename = f.FileName.ToString();
                 if (filename.Equals("") == false)
                 {
-                    var namecateDb = _context.Categories.Where(m => m.ID == p.CatId).First();
+                    var namecateDb = db.Categories.Where(m => m.ID == p.CatId).First();
                     string namecate = MyString.ToStringWithoutSpace(namecateDb.Name);
                     string ExtensionFile = MyString.GetFileExtension(filename);
                     string namefilenew = namecate + "/" + slug + "." + ExtensionFile;
@@ -121,26 +121,38 @@ namespace MVCProject.Areas.Admin.Controllers
                 p.Slug = slug;
                 p.Updated_at = DateTime.Now;
                 //p.Updated_by = int.Parse(Session["Admin_id"].ToString());
-                _context.Entry(p).State = EntityState.Modified;
-                _context.SaveChanges();
-                ViewBag.ListCategory = _context.Categories.Where(m => m.Status != 0 && m.ID >= 1).ToList();
+                db.Entry(p).State = EntityState.Modified;
+                db.SaveChanges();
+                ViewBag.ListCategory = db.Categories.Where(m => m.Status != 0 && m.ID >= 1).ToList();
                 Message.set_flash("Sửa thành công", "success");
                 return RedirectToAction("Index");
             }
             Message.set_flash("Sửa thất bại", "danger");
-            ViewBag.ListCategory = _context.Categories.Where(m => m.Status != 0 && m.ID >= 1).ToList();
+            ViewBag.ListCategory = db.Categories.Where(m => m.Status != 0 && m.ID >= 1).ToList();
             return View(p);
         }
 
         public ActionResult Delete(int id)
         {
-            Product p = _context.Products.Find(id);
+            Product p = db.Products.Find(id);
             p.Status = 0;
             p.Updated_at = DateTime.Now;
             p.Updated_by = int.Parse(Session["Admin_id"].ToString());
-            _context.Entry(p).State = EntityState.Modified;
-            _context.SaveChanges();
+            db.Entry(p).State = EntityState.Modified;
+            db.SaveChanges();
             Message.set_flash("Xóa thành công", "success");
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Status(int id)
+        {
+            Product product = db.Products.Find(id);
+            product.Status = (product.Status == 1) ? 2 : 1;
+            product.Updated_at = DateTime.Now;
+            product.Updated_by = int.Parse(Session["Admin_id"].ToString());
+            db.Entry(product).State = EntityState.Modified;
+            db.SaveChanges();
+            Message.set_flash("Thay đổi trang thái thành công", "success");
             return RedirectToAction("Index");
         }
     }
