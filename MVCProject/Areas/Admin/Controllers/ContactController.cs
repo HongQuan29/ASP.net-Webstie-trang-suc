@@ -1,6 +1,8 @@
 ﻿using MVCProject.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using MVCProject.Library;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Net;
@@ -34,5 +36,18 @@ namespace MVCProject.Areas.Admin.Controllers
             }
             return View(contact);
         }
+
+        public ActionResult Status(int id)
+        {
+            Contact contact = db.Contacts.Find(id);
+            contact.Status = (contact.Status == 1) ? 2 : 1;
+            contact.Updated_at = DateTime.Now;
+            contact.Updated_by = int.Parse(Session["Admin_id"].ToString());
+            db.Entry(contact).State = EntityState.Modified;
+            db.SaveChanges();
+            Message.set_flash("Thay đổi trang thái thành công", "success");
+            return RedirectToAction("Index");
+        }
+
     }
 }
